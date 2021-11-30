@@ -2,21 +2,26 @@ import React, { useEffect, useState } from 'react';
 import SushiContainer from './SushiContainer';
 import Table from './Table';
 
-const API = 'http://localhost:3001/sushis';
-
 function App() {
-  const [sushis, setSushis] = useState([]);
+  let [plates, setPlates] = useState([]);
+  const [moneyRemaining, setMoneyRemaining] = useState(100);
 
-  useEffect(() => {
-    fetch(API)
-      .then(res => res.json())
-      .then(data => setSushis(data));
-  }, []);
+  const addPlate = sushi => {
+    setPlates([...plates, sushi]);
+  };
+
+  const updateMoneyRemaining = price => {
+    setMoneyRemaining(() => moneyRemaining - price);
+  };
 
   return (
     <div className="app">
-      <SushiContainer sushis={sushis} />
-      <Table />
+      <SushiContainer
+        addPlate={addPlate}
+        updateMoneyRemaining={updateMoneyRemaining}
+        moneyRemaining={moneyRemaining}
+      />
+      <Table plates={plates} moneyRemaining={moneyRemaining} />
     </div>
   );
 }
